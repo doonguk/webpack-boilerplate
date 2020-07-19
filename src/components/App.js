@@ -1,4 +1,5 @@
 import { Child } from "./Child";
+import { SecondChild } from "./SecondChild";
 
 export default function App() {
   if (new.target !== App) {
@@ -7,6 +8,7 @@ export default function App() {
 
   this.init = () => {
     new Child();
+    new SecondChild();
   };
 
   this.init();
