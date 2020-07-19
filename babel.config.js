@@ -15,7 +15,20 @@ module.exports = function (api) {
     ],
   ];
 
+  const plugins = [
+    [
+      "module-resolver",
+      {
+        root: ["./src"],
+        alias: {
+          imgs: "./public/images",
+        },
+      },
+    ],
+  ];
+
   return {
     presets,
+    plugins,
   };
 };
