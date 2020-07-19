@@ -14,6 +14,12 @@ const config = {
         use: "babel-loader",
         exclude: /node_modules/,
       },
+      {
+        test: /\.css$/i,
+        // use의 경우 오른쪽에서 왼쪽으로 읽습니다.
+        // 즉, css-loader를 적용 후 style-loader 적용
+        use: ["style-loader", "css-loader"],
+      },
     ],
   },
   plugins: [
