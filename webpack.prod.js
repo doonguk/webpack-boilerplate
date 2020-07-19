@@ -1,9 +1,8 @@
-const commonConfig = require('./webpack.common')
+const commonConfig = require("./webpack.common");
 
-/** @type {import('webpack').Configuration} */
 const prodConfig = {
   ...commonConfig,
-  mode: 'production',
-}
+  mode: "production",
+};
 
-module.exports = prodConfig
+module.exports = prodConfig;

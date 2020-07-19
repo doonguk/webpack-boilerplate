@@ -1,7 +1,8 @@
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
 const config = {
-  entry: "./src/app.js",
+  entry: "./src/index.js",
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
@@ -15,6 +16,13 @@ const config = {
       },
     ],
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, "public/index.html"),
+      inject: true,
+      filename: path.resolve(__dirname, "dist/index.html"),
+    }),
+  ],
 };
 
 module.exports = config;

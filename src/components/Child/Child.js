@@ -5,7 +5,7 @@ export default function Child() {
 
   this.init = () => {
     this.$target = document.querySelector("#App");
-    this.$target.innerHTML = "Hello Donguk";
+    this.$target.innerHTML = "Hello donguk";
   };
 
   this.init();
