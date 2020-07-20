@@ -52,8 +52,6 @@ const config = {
     }),
     new CleanWebpackPlugin({ filename: "build.js" }),
   ],
-
-  resolve: {},
 };
 
 module.exports = config;
