@@ -786,13 +786,12 @@ module.exports = merge(commonConfig, {
 
 ```javascript
 const commonConfig = require("./webpack.common");
+const { merge } = require("webpack-merge");
 
-const prodConfig = {
-  ...commonConfig,
+module.exports = merge(commonConfig, {
   mode: "production",
-};
+});
 
-module.exports = prodConfig;
 ```
 
 이것은 production 환경.
