@@ -10,7 +10,8 @@
 8. <a href="#step6">index.html 생성하기</a>
 9. <a href="#step7">webpack으로 개발서버 띄우기</a>
 10. <a href="#step8">개발서버, 실서버 환경 분리하기</a>
-11. <a href="#step9">후기</a>
+11. <a href="#step9">React 사용하기(옵션) </a>
+12. <a href="#step9">후기</a>
 
 
 
@@ -885,7 +886,92 @@ config 파일을 분리했으니 `package.json`의 scripts도 수정해야한다
 
 <br/>
 
-<h2 id="step9">👿 후기</h2>
+<h2 id="step9">😚 React 사용하기</h2>
+
+React를 사용하기 위해서는 `@babel/preset-react`를 설치해야한다.
+
+```bash
+npm i @babel/preset-react -D
+```
+
+`@babel/preset-react`에는 3가지 plugin이 포함되는데, React 문법인 `jsx`를 사용하게 해주고 번들링하는 과정에르 `jsx`를 `createElement`를 통한 VanilaJS로 변환해준다. 자세한 사항은 공식문서인 [여기](https://babeljs.io/docs/en/babel-preset-react) 를 참고하자.
+
+설치한 `preset`을 `babel.config.js`에 추가해주자.
+
+**babel.config.js**
+
+```javascript
+module.exports = function (api) {
+  api.cache(true); // plugin & preset을 캐싱하여 다시 실행하지 않음
+
+  const presets = [
+    [
+      "@babel/preset-env", // 필수적인 플러그인이 모여있음
+      {
+        targets: "> 1%, not dead",
+        useBuiltIns: "usage"
+        corejs: 3,
+        modules: false, 
+      },
+    ],
+    ["@babel/preset-react"], // 요기
+  ];
+
+  const plugins = [
+    [
+      "module-resolver",
+      {
+        root: ["./src"],
+        alias: {
+          imgs: "./public/images",
+        },
+      },
+    ],
+  ];
+
+  return {
+    presets,
+    plugins,
+  };
+};
+
+```
+
+잘 동작하는지 테스트할 겸 코드도 작성해보자. 그럼 React를 설치해야겠지?
+
+```bash
+npm i react react-dom 
+```
+
+**App.js**
+
+```javascript
+import React from 'react'
+
+export default function App() {
+  return ( <div>hello world</div>)
+}
+```
+
+**index.js**
+
+```javascript
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./components/App.js";
+
+ReactDOM.render(<App />, document.querySelector("#App"));
+```
+
+결과..
+
+![image](https://user-images.githubusercontent.com/39187116/89734750-fcd62c00-da98-11ea-87af-4a4c21605467.png)
+
+잘 뜬다. 끗!!
+
+<br/>
+
+<h2 id="step10">👿 후기</h2>
 
 누가 webpack은 학문을 공부하는 것이라고 했던 것 같은데, 막상 해보니까 진짜인 것 같다. 해도 해도 끝이 없이 나온다 (옵션들이..). 하지만 이번 경험을 토대로 혼자 프론트엔드 개발 환경 셋팅을 어느정도 할 줄 알게 된 것 같다. babel & wepack 설정 이라는 두려움도 없어지고 ㅎㅎ,, 개발을 하면서 그떄 그때 필요한 플러그인들을 적용하며 알아가고 일단은 여기까지만 해야겠다..
 
