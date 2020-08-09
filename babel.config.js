@@ -13,6 +13,7 @@ module.exports = function (api) {
         modules: false, // ES6 Module System 사용
       },
     ],
+    ["@babel/preset-react"],
   ];
 
   const plugins = [

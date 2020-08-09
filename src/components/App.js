@@ -1,15 +1,5 @@
-import { Child } from "components/Child";
-import { SecondChild } from "components/SecondChild";
+import React from "react";
 
 export default function App() {
-  if (new.target !== App) {
-    return new App();
-  }
-
-  this.init = () => {
-    new Child();
-    new SecondChild();
-  };
-
-  this.init();
+  return <div>Hello World!</div>;
 }

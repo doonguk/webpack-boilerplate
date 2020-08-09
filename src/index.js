@@ -1,7 +1,5 @@
+import React from "react";
+import ReactDOM from "react-dom";
 import App from "./components/App.js";
 
-try {
-  new App();
-} catch (e) {
-  console.error(e);
-}
+ReactDOM.render(<App />, document.querySelector("#App"));
