@@ -1,25 +1,21 @@
-
-
 ## 📒 목차
 
 1. <a href="#babel">babel?</a>
-
 2. <a href="#webpack">webpack?</a>
-
 3. <a href="#step1">babel 적용하기</a>
-
 4. <a href="#step2">webpack 적용하기</a>
-
-5. <a href="#step3">style 관련 loader 적용하기 (feat. sass-loader)</a>
+5. <a href="#step3">style 관련 loader 적용하기 (feat. sass-loader)</a>
 6. <a href="#step4">file-loader, url-loader 적용하기</a>
 7. <a href="#step5">모듈을 절대경로로 불러오기</a>
-8. <a href="#step6">webpack으로 개발서버 띄우기</a>
-9. <a href="#step7">개발서버, 실서버 환경 분리하기</a>
-10. <a href="#step8">후기</a>
+8. <a href="#step6">index.html 생성하기</a>
+9. <a href="#step7">webpack으로 개발서버 띄우기</a>
+10. <a href="#step8">개발서버, 실서버 환경 분리하기</a>
+11. <a href="#step9">후기</a>
 
 
 
 <h2 id="babel">🤔 babel</h3>
+
 
 ### babel?
 
@@ -586,14 +582,17 @@ module.exports = function (api) {
     ],
   ];
 
-  const plugins = [
-    "module-resolver",
-    {
-      root: ["./src"],
-      alias: {
-        imgs: "./public/images",
+ 
+const plugins = [
+    [
+      "module-resolver",
+      {
+        root: ["./src"],
+        alias: {
+          imgs: "./public/images",
+        },
       },
-    },
+    ]
   ];
 
   return {
@@ -615,7 +614,82 @@ module.exports = function (api) {
 
 <br/>
 
-<h2 id="step6"> 🥳 Webpack으로 개발서버 띄우기</h2>
+<h2 id="step6"> 🤡 index.html 생성하기</h2>
+
+요즘 SPA 프로젝트를 보면 `index.html`을 아래와 같은 형식으로 생성한다.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>하이</title>
+  </head>
+  <body>
+    <div id="App"></div>
+  </body>
+</html>
+
+```
+
+static 한 파일을 번들링해서 하나의 js 파일로 만들고 이를 `index.html` 파일에서 불러오는 형식으로 많이 개발하는데, 이는 `HtmlWebpackPlugin`  과 함께라면 가능하다ㅎㅎ,,
+
+```bash
+npm i html-webpack-plugin -D
+```
+
+설치 후 `webpack.config.js` 를 수정하자
+
+```javascript
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+... 생략
+
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: "style.css", // 원하는 filename
+    }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, './public/index.html'),
+      inject: true,
+      filename: path.resolve(__dirname, './dist/index.html'),
+    }),
+  ],
+};
+
+module.exports = config;
+```
+
+`plugins` 부분에 코드를 추가했다.
+
+- `template` 은 `index.html`을 생성할 때 어떤 경로의 `html` 파일을 참조할 건지 적는다.
+- `inject`는 번들링한 파일을 자동으로 불러올지 말지 여부이다.
+- `filename`에 지정된 경로에 `index.html`이 생성된다. 
+- `html` 파일 이름이 꼭 `index.html` 이지 않아도 된다. `template`, `filename`에 지정한 이름으로 참조하고 생성한다.
+
+`template` 에  `./public` 경로의 `index.html`을 참조하기로 했으니 만들어주자.
+
+**(프로젝트 root경로)/public/index.html**
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>하이</title>
+  </head>
+  <body>
+    <div id="App"></div>
+  </body>
+</html>
+```
+
+
+
+<br/>
+
+<h2 id="step7"> 🥳 Webpack으로 개발서버 띄우기</h2>
 
 webpack으로 빌드한 후 서버를 띄우기 위해서는 `webpack-dev-server` plugin이 필요하다.
 
@@ -701,7 +775,7 @@ scripts 부분에 추가해준다.
 
 <br/>
 
-<h2 id="step7"> 😸 개발서버, 실서버 환경 분리하기</h2>
+<h2 id="step8"> 😸 개발서버, 실서버 환경 분리하기</h2>
 
 `webpack-dev-server`는 개발 환경에만 종속되는 plugin이기도 하고 개발서버, 실서버 환경을 분리해서 작성해주는게 좋기 때문에 나눠보자. 이때 공통된 속성을 정의해서 불러오기 위해 `webpack-merge` 모듈이 필요하다
 
@@ -786,13 +860,12 @@ module.exports = merge(commonConfig, {
 
 ```javascript
 const commonConfig = require("./webpack.common");
+const { merge } = require("webpack-merge");
 
-const prodConfig = {
-  ...commonConfig,
+module.exports = merge(commonConfig, {
   mode: "production",
-};
+});
 
-module.exports = prodConfig;
 ```
 
 이것은 production 환경.
@@ -812,7 +885,7 @@ config 파일을 분리했으니 `package.json`의 scripts도 수정해야한다
 
 <br/>
 
-<h2 id="step8">👿 후기</h2>
+<h2 id="step9">👿 후기</h2>
 
 누가 webpack은 학문을 공부하는 것이라고 했던 것 같은데, 막상 해보니까 진짜인 것 같다. 해도 해도 끝이 없이 나온다 (옵션들이..). 하지만 이번 경험을 토대로 혼자 프론트엔드 개발 환경 셋팅을 어느정도 할 줄 알게 된 것 같다. babel & wepack 설정 이라는 두려움도 없어지고 ㅎㅎ,, 개발을 하면서 그떄 그때 필요한 플러그인들을 적용하며 알아가고 일단은 여기까지만 해야겠다..
 
@@ -830,6 +903,6 @@ config 파일을 분리했으니 `package.json`의 scripts도 수정해야한다
 8. [https://medium.com/naver-fe-platform/webpack%EC%97%90%EC%84%9C-tree-shaking-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0-1748e0e0c365](https://medium.com/naver-fe-platform/webpack에서-tree-shaking-적용하기-1748e0e0c365)
 9. http://jeonghwan-kim.github.io/js/2017/05/15/webpack.html
 
-9. https://wonism.github.io/react-native-alias/
-10. https://ibrahimovic.tistory.com/51
-11. https://perfectacle.github.io/2016/11/14/Webpack-devtool-option-Performance/
+10. https://wonism.github.io/react-native-alias/
+11. https://ibrahimovic.tistory.com/51
+12. https://perfectacle.github.io/2016/11/14/Webpack-devtool-option-Performance/
