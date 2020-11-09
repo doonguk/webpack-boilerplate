@@ -857,7 +857,7 @@ module.exports = merge(commonConfig, {
 
 공통으로 설정한 config 모듈을 불러와서 `merge` 시켰다.
 
-**webpack.proud.js**
+**webpack.prod.js**
 
 ```javascript
 const commonConfig = require("./webpack.common");
