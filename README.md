@@ -230,7 +230,7 @@ console.log(foo.flat());
 **1. 필요 module install**
 
 ```bash
-npm i webpack webpack-cli - D
+npm i webpack webpack-cli -D
 ```
 
 **2. webpack.config.js 작성**
